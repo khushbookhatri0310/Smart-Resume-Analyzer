@@ -5,6 +5,7 @@ from skills import load_skills, extract_skills
 from ats import calculate_ats_score
 from recommendation import generate_recommendations
 from report import generate_pdf_report
+from ai import analyze_resume_with_ai
 # Page configuration
 st.set_page_config(
     page_title="Smart Resume Analyzer",
@@ -74,6 +75,21 @@ if uploaded_file and analyze:
             file_name="ATS_Report.pdf",
             mime="application/pdf"
         )
+    st.subheader("AI Resume Review")
+    with st.spinner("AI is analyzing your resume..."):
+        ai_feedback = analyze_resume_with_ai(
+            extracted_text, 
+            job_description
+        )
+    st.markdown(ai_feedback)
+    try:
+        ai_feedback = analyze_resume_with_ai(
+                                extracted_text,
+                                job_description
+        )
+        st.markdown(ai_feedback)
+    except Exception as e:
+            st.error(f"AI Review Failed: {e}")
     with st.container():
         st.subheader("Resume Summary")
         st.write(" File Name:", uploaded_file.name)
