@@ -42,3 +42,38 @@ Keep the response professional and well formatted.
     )
 
     return response.choices[0].message.content
+def improve_resume_with_ai(resume_text, job_description):
+
+    prompt = f"""
+You are an expert Resume Writer and ATS Expert.
+
+Resume:
+{resume_text}
+
+Job Description:
+{job_description}
+
+Rewrite and improve the resume by:
+
+1. Improving grammar.
+2. Making bullet points more professional.
+3. Adding ATS-friendly wording.
+4. Keeping all information truthful.
+5. Do NOT invent projects or skills.
+6. Format the output section-wise.
+
+Return only the improved resume.
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.2
+    )
+
+    return response.choices[0].message.content
