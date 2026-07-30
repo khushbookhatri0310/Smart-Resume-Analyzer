@@ -147,58 +147,68 @@ def show_ui():
         for recommendation in st.session_state.recommendations:
             st.info(recommendation)
 
-        st.subheader("🤖 AI Resume Review")
-        st.markdown(st.session_state.ai_feedback)
+        tab1, tab2, tab3, tab4 = st.tabs([
+                        "🤖 Resume Review",
+                        "✨ Resume Improvement",
+                        "📄 Cover Letter",
+                        "🎤 Interview Questions"
+                    ])
+        with tab1: 
+            st.subheader("🤖 AI Resume Review")
+            st.markdown(st.session_state.ai_feedback)
 
         st.divider()
 
-        if st.button("✨ Improve Resume"):
+        with tab2: 
+            if st.button("✨ Improve Resume"):
 
-            with st.spinner("Improving your resume..."):
+                with st.spinner("Improving your resume..."):
 
-                improved_resume = improve_resume_with_ai(
-                    st.session_state.resume_text,
-                    st.session_state.job_description
+                    improved_resume = improve_resume_with_ai(
+                        st.session_state.resume_text,
+                        st.session_state.job_description
+                    )
+
+                st.session_state.improved_resume = improved_resume
+
+            if st.session_state.improved_resume:
+
+                st.subheader("✨ Improved Resume")
+
+                st.markdown(
+                    st.session_state.improved_resume
                 )
+        with tab3: 
+            if st.button("📄 Generate Cover Letter"):
 
-            st.session_state.improved_resume = improved_resume
+                with st.spinner("Generating Cover Letter..."):
 
-        if st.session_state.improved_resume:
+                    cover_letter = generate_cover_letter(
+                        st.session_state.resume_text,
+                        st.session_state.job_description
+                    )
+                st.session_state.cover_letter = cover_letter
 
-            st.subheader("✨ Improved Resume")
+            if st.session_state.cover_letter:
+                st.subheader("📄 AI Cover Letter")
+                st.markdown(st.session_state.cover_letter)
 
-            st.markdown(
-                st.session_state.improved_resume
-            )
-        if st.button("📄 Generate Cover Letter"):
+        with tab4: 
+            if st.button("🎤 Generate Interview Questions"):
 
-            with st.spinner("Generating Cover Letter..."):
+                with st.spinner("Generating Interview Questions..."):
 
-                cover_letter = generate_cover_letter(
-                    st.session_state.resume_text,
-                    st.session_state.job_description
-                )
-            st.session_state.cover_letter = cover_letter
+                    interview_questions = generate_interview_questions(
+                        st.session_state.resume_text,
+                        st.session_state.job_description
+                    )
 
-        if st.session_state.cover_letter:
-            st.subheader("📄 AI Cover Letter")
-            st.markdown(st.session_state.cover_letter)
+                st.session_state.interview_questions = interview_questions
 
-        if st.button("🎤 Generate Interview Questions"):
+            if st.session_state.interview_questions:
+                st.subheader("🎤 AI Interview Questions")
+                st.markdown(st.session_state.interview_questions)
 
-            with st.spinner("Generating Interview Questions..."):
-
-                interview_questions = generate_interview_questions(
-                    st.session_state.resume_text,
-                    st.session_state.job_description
-                )
-
-            st.session_state.interview_questions = interview_questions
-
-        if st.session_state.interview_questions:
-            st.subheader("🎤 AI Interview Questions")
-            st.markdown(st.session_state.interview_questions)
-            
         generate_pdf_report(
             st.session_state.ats_score,
             st.session_state.matched_skills,
