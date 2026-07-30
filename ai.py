@@ -112,3 +112,39 @@ Return only the cover letter.
     )
 
     return response.choices[0].message.content
+def generate_interview_questions(resume_text, job_description):
+
+    prompt = f"""
+You are an experienced technical interviewer.
+
+Based on the resume and job description below, generate interview questions.
+
+Resume:
+{resume_text}
+
+Job Description:
+{job_description}
+
+Generate:
+
+1. 5 HR Interview Questions
+2. 5 Technical Interview Questions
+3. 5 Project-Based Interview Questions
+4. 3 Behavioral Interview Questions
+
+Format the response with proper headings and bullet points.
+Return only the interview questions.
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.4
+    )
+
+    return response.choices[0].message.content

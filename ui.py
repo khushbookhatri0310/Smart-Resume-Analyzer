@@ -6,7 +6,7 @@ from skills import load_skills, extract_skills
 from ats import calculate_ats_score
 from recommendation import generate_recommendations
 from report import generate_pdf_report
-from ai import (analyze_resume_with_ai, improve_resume_with_ai,generate_cover_letter)
+from ai import (analyze_resume_with_ai, improve_resume_with_ai,generate_cover_letter, generate_interview_questions)
 
 def initialize_session():
 
@@ -21,7 +21,8 @@ def initialize_session():
         "ats_score": 0,
         "ai_feedback": "",
         "improved_resume": "",
-        "cover_letter": ""
+        "cover_letter": "",
+        "interview_questions": ""
     }
 
     for key, value in defaults.items():
@@ -183,6 +184,21 @@ def show_ui():
             st.subheader("📄 AI Cover Letter")
             st.markdown(st.session_state.cover_letter)
 
+        if st.button("🎤 Generate Interview Questions"):
+
+            with st.spinner("Generating Interview Questions..."):
+
+                interview_questions = generate_interview_questions(
+                    st.session_state.resume_text,
+                    st.session_state.job_description
+                )
+
+            st.session_state.interview_questions = interview_questions
+
+        if st.session_state.interview_questions:
+            st.subheader("🎤 AI Interview Questions")
+            st.markdown(st.session_state.interview_questions)
+            
         generate_pdf_report(
             st.session_state.ats_score,
             st.session_state.matched_skills,
