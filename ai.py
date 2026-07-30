@@ -77,3 +77,38 @@ Return only the improved resume.
     )
 
     return response.choices[0].message.content
+def generate_cover_letter(resume_text, job_description):
+
+    prompt = f"""
+You are a professional career coach.
+
+Using the resume and job description below, write a professional cover letter.
+
+Resume:
+{resume_text}
+
+Job Description:
+{job_description}
+
+Instructions:
+- Keep it within 300-400 words.
+- Be professional.
+- Highlight relevant skills.
+- Do not invent experience or projects.
+- End with a professional closing.
+
+Return only the cover letter.
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.4
+    )
+
+    return response.choices[0].message.content

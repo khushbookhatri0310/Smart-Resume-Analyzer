@@ -6,8 +6,7 @@ from skills import load_skills, extract_skills
 from ats import calculate_ats_score
 from recommendation import generate_recommendations
 from report import generate_pdf_report
-from ai import analyze_resume_with_ai, improve_resume_with_ai
-
+from ai import (analyze_resume_with_ai, improve_resume_with_ai,generate_cover_letter)
 
 def initialize_session():
 
@@ -21,7 +20,8 @@ def initialize_session():
         "recommendations": [],
         "ats_score": 0,
         "ai_feedback": "",
-        "improved_resume": ""
+        "improved_resume": "",
+        "cover_letter": ""
     }
 
     for key, value in defaults.items():
@@ -169,6 +169,19 @@ def show_ui():
             st.markdown(
                 st.session_state.improved_resume
             )
+        if st.button("📄 Generate Cover Letter"):
+
+            with st.spinner("Generating Cover Letter..."):
+
+                cover_letter = generate_cover_letter(
+                    st.session_state.resume_text,
+                    st.session_state.job_description
+                )
+            st.session_state.cover_letter = cover_letter
+
+        if st.session_state.cover_letter:
+            st.subheader("📄 AI Cover Letter")
+            st.markdown(st.session_state.cover_letter)
 
         generate_pdf_report(
             st.session_state.ats_score,
